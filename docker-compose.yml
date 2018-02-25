@@ -1,0 +1,57 @@
+version: '3.3'
+
+volumes:
+  mariadb-data:
+
+services:
+  mariadb:
+    image: mariadb:10.2
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      - TZ=UTC
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=ifdb
+      - MYSQL_USER=ifuser
+      - MYSQL_PASSWORD=ifpass
+    volumes:
+      - type: volume
+        source: mariadb-data
+        target: /var/lib/mysql
+
+  adminer:
+    image: adminer:4.6
+    restart: always
+    ports:
+      - 8080:8080
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - "80:80/tcp"
+    restart: always
+    environment:
+      - TZ=UTC
+    volumes:
+      - type: bind
+        source: ./docker/nginx.conf
+        target: /etc/nginx/conf.d/nginx.conf
+        read_only: true
+    depends_on:
+      - core
+
+  core:
+    image: python:3.6-stretch
+    restart: always
+    entrypoint: /opt/insta-follow/docker/boot-strap.sh
+    environment:
+      - TZ=UTC
+    volumes:
+      - type: bind
+        source: ./
+        target: /opt/insta-follow
+        read_only: true
+    depends_on:
+      - mariadb

@@ -1,0 +1,13 @@
+[uwsgi]
+
+uwsgi:
+  socket: :80
+  chdir: /opt/insta-follow
+  processes: 2
+  threads:  1
+  module: main
+  callable: app
+
+  # use this options just for development
+  py-autoreload: 3
+  worker-reload-mercy: 2

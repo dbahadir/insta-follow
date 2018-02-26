@@ -35,7 +35,7 @@ def updateFollower(user, relatedUserId) :
     userName = user['username']
     fullName = user['full_name']
     isPrivate = user['is_private']
-    print (f"USER: {user}")
+    print ("USER: {0}".format(user))
     dbUser = InstaUser.query.filter_by(insta_id=instaId).first()
     if dbUser :
         print("User already processed, skip it.")

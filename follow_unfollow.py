@@ -31,13 +31,13 @@ def follow(api) :
             if res:
                 followUser.following_status = constant.FOLLOWER_STATUS_YES
                 followUser.following_date = datetime.datetime.now()
-                print(f"User follow was succeed; {followUser.user_name}")
+                print("User follow was succeed; {0}".format(followUser.user_name))
                 daily += 1
                 if checkDailyCount(daily) == -1 :
                     break;
             else :
                 followUser.status = constant.USER_STATUS_NEW
-                print(f"User follow was failed; {followUser.user_name}")
+                print("User follow was failed; {0}".format(followUser.user_name))
             db_session.commit()
             time.sleep(1)
     else :
@@ -55,10 +55,10 @@ def unfollow(api) :
                 unfollowUser.status = constant.USER_STATUS_PROCESSED
                 unfollowUser.following_status = constant.FOLLOWER_STATUS_OLD
                 unfollowUser.unfollowing_date = datetime.datetime.now()
-                print(f"User unfollow was succeed; {unfollowUser.user_name}")
+                print("User unfollow was succeed; {0}".format(unfollowUser.user_name))
                 db_session.commit()
             else :
-                print(f"User unfollow was failed; {unfollowUser.user_name}")
+                print("User unfollow was failed; {0}".format(unfollowUser.user_name))
             time.sleep(1)
     else :
         print("There is no User for unfollow")

@@ -3,7 +3,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import config
 
-engine = create_engine(f"mysql://{config.MARIADB_USER}:{config.MARIADB_PASS}@mariadb/{config.MARIADB_DB}?charset=utf8mb4&use_unicode=1")
+engine = create_engine("mysql://{0}:{1}@mariadb/{2}?charset=utf8mb4&use_unicode=1".format(config.MARIADB_USER, config.MARIADB_PASS, config.MARIADB_DB))
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()

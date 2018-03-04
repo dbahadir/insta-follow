@@ -14,7 +14,7 @@ def checkDailyCount(count) :
             return count
     else :
         today =  time.strftime('%Y-%m-%d 00:00:00', time.localtime())
-        dailyCount = InstaUser.query.filter(InstaUser.following_date >= today)
+        dailyCount = InstaUser.query.filter_by(status=constant.USER_STATUS_PROCESSING).filter(InstaUser.following_date >= today)
         if dailyCount.count() < config.FOLLOW_DAILY_COUNT :
             return dailyCount.count()
     print("Daily follow limit exceedeed")
@@ -31,14 +31,15 @@ def follow(api) :
             if res:
                 followUser.following_status = constant.FOLLOWER_STATUS_YES
                 followUser.following_date = datetime.datetime.now()
+                db_session.commit()
                 print("User follow was succeed; {0}".format(followUser.user_name))
                 daily += 1
                 if checkDailyCount(daily) == -1 :
                     break;
             else :
                 followUser.status = constant.USER_STATUS_NEW
+                db_session.commit()
                 print("User follow was failed; {0}".format(followUser.user_name))
-            db_session.commit()
             time.sleep(1)
     else :
         print("There is no new User for follow")

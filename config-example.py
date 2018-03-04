@@ -4,6 +4,7 @@ SECRET_KEY = 'super-secret'
 MARIADB_DB = 'dbname'
 MARIADB_USER = 'dbuser'
 MARIADB_PASS = 'dbpass'
+MARIADB_HOST = 'localhost'
 
 INSTA_USER = 'instagram_user_name'
 INSTA_PASS = 'instagram_password'

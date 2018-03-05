@@ -8,6 +8,11 @@ from models import InstaUser
 import config
 import constant
 
+def login():
+    api = InstagramAPI(config.INSTA_USER, config.INSTA_PASS)
+    api.login()
+    return api
+
 def checkDailyCount(count) :
     if count :
         if count < config.FOLLOW_DAILY_COUNT :
@@ -20,7 +25,8 @@ def checkDailyCount(count) :
     print("Daily follow limit exceedeed")
     return -1
 
-def follow(api) :
+def follow() :
+    api = login()
     daily = checkDailyCount(0)
     followUsers = InstaUser.query.filter_by(is_related=False, status=constant.USER_STATUS_NEW)
     if followUsers.count() and daily > -1:
@@ -47,13 +53,16 @@ def follow(api) :
                     break;
                 else :
                     sec = 60 * i
-                    print("sleeping {0}seconds...".format(sec));
+                    print("sleeping {0} seconds...".format(sec));
                     time.sleep(sec)
+                    api = login()
+                    i += 1
             time.sleep(1)
     else :
         print("There is no new User for follow")
 
-def unfollow(api) :
+def unfollow() :
+    api = login()
     now = time.time()
     before = now - config.UNFOLLOW_DELAY
     theTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(before))
@@ -76,14 +85,14 @@ def unfollow(api) :
                     break;
                 else :
                     sec = 60 * i
-                    print("sleeping {0}seconds...".format(sec));
+                    print("sleeping {0} seconds...".format(sec));
                     time.sleep(sec)
+                    api = login()
+                    i += 1
             time.sleep(1)
     else :
         print("There is no User for unfollow")
 
-api = InstagramAPI(config.INSTA_USER, config.INSTA_PASS)
-api.login()
 follow(api)
 unfollow(api)
 

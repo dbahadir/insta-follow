@@ -93,7 +93,7 @@ def unfollow() :
     else :
         print("There is no User for unfollow")
 
-follow(api)
-unfollow(api)
+follow()
+unfollow()
 
 sys.exit(0)

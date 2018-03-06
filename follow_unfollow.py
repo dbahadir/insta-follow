@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys, database, datetime, time
+from random import randint
 from InstagramAPI import InstagramAPI
 from database import db_session
 from models import InstaUser
@@ -25,6 +26,11 @@ def checkDailyCount(count) :
     print("Daily follow limit exceedeed")
     return -1
 
+def delay() :
+    i = randint(2, 11)
+    print ("Waiting {0} seconds for next".format(i))
+    time.sleep(i)
+
 def follow() :
     api = login()
     daily = checkDailyCount(0)
@@ -44,6 +50,7 @@ def follow() :
                 daily += 1
                 if checkDailyCount(daily) == -1 :
                     break;
+                delay()
             else :
                 followUser.status = constant.USER_STATUS_NEW
                 db_session.commit()
@@ -78,6 +85,7 @@ def unfollow() :
                 db_session.commit()
                 print("User unfollow was succeed; {0}".format(unfollowUser.user_name))
                 i = 1
+                delay()
             else :
                 print("User unfollow was failed; {0}".format(unfollowUser.user_name))
                 if i > 10 :

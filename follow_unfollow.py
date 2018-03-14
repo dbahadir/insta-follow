@@ -6,6 +6,7 @@ from random import randint
 from InstagramAPI import InstagramAPI
 from database import db_session
 from models import InstaUser
+from sqlalchemy import func
 import config
 import constant
 
@@ -34,7 +35,7 @@ def delay() :
 def follow() :
     api = login()
     daily = checkDailyCount(0)
-    followUsers = InstaUser.query.filter_by(is_related=False, status=constant.USER_STATUS_NEW)
+    followUsers = InstaUser.query.filter_by(is_related=False, status=constant.USER_STATUS_NEW).order_by(func.rand())
     if followUsers.count() and daily > -1:
         i = 1
         for followUser in followUsers :
@@ -73,7 +74,7 @@ def unfollow() :
     now = time.time()
     before = now - config.UNFOLLOW_DELAY
     theTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(before))
-    unfollowUsers = InstaUser.query.filter_by(is_related=False, status=constant.USER_STATUS_PROCESSING).filter(InstaUser.following_date <= theTime)
+    unfollowUsers = InstaUser.query.filter_by(is_related=False, status=constant.USER_STATUS_PROCESSING).filter(InstaUser.following_date <= theTime).order_by(func.rand())
     if unfollowUsers.count() :
         i = 1
         for unfollowUser in unfollowUsers :
